@@ -105,7 +105,7 @@ volumes:
           path: application.secret.properties
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: 
+volumeMounts:
   - name: configmap-volume
     readOnly: true
     mountPath: /config
