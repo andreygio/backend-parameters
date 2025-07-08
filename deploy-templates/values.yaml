@@ -45,7 +45,7 @@ service:
   port: 8080
 
 ingress:
-  enabled: false
+  enabled: true
   dnsWildcard: development.krci-dev.cloudmentor.academy
   className: ""
   annotations: {}
@@ -90,14 +90,28 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: configmap-volume
+    configMap:
+      name: cm-extra-config
+      items:
+        - key: application.properties
+          path: application.properties
+  - name: secret-volume
+    secret:
+      secretName: secret-extra-config
+      items:
+        - key: application.secret.properties
+          path: application.secret.properties
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
+volumeMounts:
+  - name: configmap-volume
+    readOnly: true
+    mountPath: /config
+  - name: secret-volume
+    readOnly: true
+    mountPath: /secret-config
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
